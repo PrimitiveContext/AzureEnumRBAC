@@ -2,38 +2,12 @@
 """
 AzureEnumRBAC.py
 
-An orchestrator for the Azure enumeration scripts, with resume/restart logic
-and a single output folder at AzureEnumRBAC/output. Sub-scripts run in the
-AzureEnumRBAC/ directory so that all references to "output" in the scripts 
-actually point to AzureEnumRBAC/output (no duplicates).
-
-Directory structure:
-  your_project/
-    AzureEnumRBAC.py  <-- this file
-    AzureEnumRBAC/
-      a_login_or_install.py
-      b_get_subscriptions.py
-      c_enumerate_resources.py
-      d_enumerate_roles.py
-      e_enumerate_assignments.py
-      f_enumerate_group_members.py
-      g_combine_rbac_users.py
-      h_get_user_personal_data.py
-      i_combine_identities.py
-      j_role_matrix.py
-      k_user_matrix.py
-      l_bubble_chart_roles.py
-      m_bubble_chart_users.py
-      helpers.py
-      output/
+Orchestrator that runs enumeration sub-scripts in the user's current directory,
+redirecting "output" references to <pwd>/AzureEnumRBAC/output.
 
 Usage:
-  python AzureEnumRBAC.py
-    - Runs all phases in order (a through m).
-    - If interrupted, you can run it again; it will detect the run log 
-      at 'AzureEnumRBAC/output/AzureEnumRBAC_run.log' and let you resume.
-
-If a script fails (nonzero exit), the entire process stops. 
+  AzureEnumRBAC
+    (installed as a console_script entry point in pyproject.toml)
 """
 
 import os
@@ -43,7 +17,7 @@ import json
 import shutil
 import re
 
-# The scripts to run, in order:
+# The sub-scripts to run, in order:
 SCRIPTS_IN_ORDER = [
     "a_login_or_install.py",
     "b_get_subscriptions.py",
@@ -56,25 +30,27 @@ SCRIPTS_IN_ORDER = [
     "i_combine_identities.py",
     "j_role_matrix.py",
     "k_user_matrix.py",
-    "l_bubble_chart_roles.py",
-    "m_bubble_chart_users.py"
+    "l_bubble_chart_users.py",
+    "m_bubble_chart_roles.py"
 ]
 
-# We'll store a tiny JSON like {"last_completed": 3} to indicate which script index was last successful
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-SCRIPT_DIR = BASE_DIR       # We'll run sub-scripts in this directory
-OUTPUT_DIR = os.path.join(os.getcwd(), "AzureEnumRBAC")        # So all references to "output" from sub-scripts => AzureEnumRBAC/output
-RUN_LOG_FILE = os.path.join(OUTPUT_DIR, "AzureEnumRBAC_run.log")
+# Find where these sub-scripts actually live (the installed package directory).
+THIS_PACKAGE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Final output directory (in the same folder as AzureEnumRBAC.py):
-FINAL_OUTPUT_DIR = os.path.join(OUTPUT_DIR, "FINAL_OUTPUT")
+# The user’s current working directory:
+USER_CWD = os.getcwd()
+
+# We want sub-scripts to place outputs in: <pwd>/AzureEnumRBAC/output
+USER_BASE_PATH = os.path.join(USER_CWD, "AzureEnumRBAC")
+USER_OUTPUT_DIR = os.path.join(USER_BASE_PATH, "output")
+USER_FINAL_DIR  = os.path.join(USER_BASE_PATH, "FINAL_OUTPUT")
+
+# We'll keep a small JSON log in <pwd>/AzureEnumRBAC/output/AzureEnumRBAC_run.log
+RUN_LOG_FILE = os.path.join(USER_OUTPUT_DIR, "AzureEnumRBAC_run.log")
 
 
 def load_run_log():
-    """
-    Loads run log if present, returns integer last_completed.
-    If missing or error, return -1.
-    """
+    """Load run log if present; return last_completed index or -1 if missing."""
     if os.path.exists(RUN_LOG_FILE):
         try:
             with open(RUN_LOG_FILE, "r", encoding="utf-8") as f:
@@ -86,9 +62,7 @@ def load_run_log():
 
 
 def save_run_log(index):
-    """
-    Write run log with {"last_completed": index} to AzureEnumRBAC_run.log.
-    """
+    """Write run log with {'last_completed': index}."""
     data = {"last_completed": index}
     with open(RUN_LOG_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f)
@@ -96,19 +70,20 @@ def save_run_log(index):
 
 def run_phase_script(script_name, index):
     """
-    Runs a single script by name, from within AzureEnumRBAC/ as cwd.
-    If script fails, we exit entirely.
+    Run a single sub-script from THIS_PACKAGE_DIR, but cwd=<pwd>/AzureEnumRBAC.
+
+    So if sub-script does 'os.makedirs("output", exist_ok=True)', it lands in
+    <pwd>/AzureEnumRBAC/output instead of the library install folder.
     """
-    script_path = os.path.join(SCRIPT_DIR, script_name)
+    script_path = os.path.join(THIS_PACKAGE_DIR, script_name)
     if not os.path.exists(script_path):
-        print(f"[ERROR] Script not found: {script_path}")
+        print(f"[ERROR] Script not found in package: {script_path}")
         sys.exit(1)
 
-    print(f"[INFO] Running phase {index} script: {script_name}")
+    print(f"[INFO] Running phase {index}: {script_name}")
     cmd = [sys.executable, script_path]
     try:
-        # The key: run in SCRIPT_DIR so all references to "output" => AzureEnumRBAC/output
-        subprocess.run(cmd, check=True, cwd=SCRIPT_DIR)
+        subprocess.run(cmd, check=True, cwd=USER_BASE_PATH)
     except subprocess.CalledProcessError as e:
         print(f"[ERROR] Phase script failed: {script_name}")
         sys.exit(e.returncode)
@@ -116,25 +91,21 @@ def run_phase_script(script_name, index):
 
 def copy_final_outputs():
     """
-    After all scripts complete, copy files from AzureEnumRBAC/output whose names
-    start with i_, j_, k_, l_, or m_ into AzureEnumRBAC_FINAL_OUTPUT,
-    removing the letter-underscore prefix from each filename.
-    Print a simple ASCII summary of the final file outputs.
+    Copy files from <pwd>/AzureEnumRBAC/output that start with i_, j_, k_, l_, or m_
+    into <pwd>/AzureEnumRBAC/FINAL_OUTPUT, removing the prefix from each filename.
     """
-    # Create AzureEnumRBAC_FINAL_OUTPUT if it doesn't exist
-    if not os.path.exists(FINAL_OUTPUT_DIR):
-        os.makedirs(FINAL_OUTPUT_DIR, exist_ok=True)
+    if not os.path.exists(USER_FINAL_DIR):
+        os.makedirs(USER_FINAL_DIR, exist_ok=True)
 
-    # Regex to match filenames starting with i_, j_, k_, l_, or m_
     pattern = re.compile(r'^[ijklm]_')
-
     final_filenames = []
-    for file_name in os.listdir(OUTPUT_DIR):
+
+    for file_name in os.listdir(USER_OUTPUT_DIR):
         if pattern.match(file_name):
-            old_path = os.path.join(OUTPUT_DIR, file_name)
-            # Remove the first two chars (letter + underscore) from the filename
+            old_path = os.path.join(USER_OUTPUT_DIR, file_name)
+            # remove first two chars: 'i_', 'j_', etc.
             new_file_name = file_name[2:]
-            new_path = os.path.join(FINAL_OUTPUT_DIR, new_file_name)
+            new_path = os.path.join(USER_FINAL_DIR, new_file_name)
 
             if os.path.isfile(old_path):
                 shutil.copy2(old_path, new_path)
@@ -142,7 +113,7 @@ def copy_final_outputs():
 
     if final_filenames:
         print("\n=========================================================")
-        print(" Final Output Files Created in AzureEnumRBAC_FINAL_OUTPUT:")
+        print(" Final Output Files Created in AzureEnumRBAC/FINAL_OUTPUT:")
         print("=========================================================")
         for fname in final_filenames:
             print(f"  {fname}")
@@ -152,50 +123,46 @@ def copy_final_outputs():
 
 
 def main():
-    # Make sure AzureEnumRBAC/output directory exists for logs
-    if not os.path.exists(OUTPUT_DIR):
-        os.makedirs(OUTPUT_DIR, exist_ok=True)
+    # 1) Ensure <pwd>/AzureEnumRBAC/output exists (for logs + sub-script data)
+    if not os.path.exists(USER_OUTPUT_DIR):
+        os.makedirs(USER_OUTPUT_DIR, exist_ok=True)
 
     total_scripts = len(SCRIPTS_IN_ORDER)
     last_completed = load_run_log()
 
     if last_completed < 0:
-        # no log => fresh
+        # Fresh run
         start_index = 0
-        print("[INFO] No existing run log found. Starting from script #0 ...")
+        print("[INFO] No existing run log found in current directory. Starting at phase #0 ...")
     else:
-        # we have a run log
         resume_index = last_completed + 1
         if resume_index >= total_scripts:
             print("[INFO] The run log indicates all scripts have completed already.")
             choice = input("Re-run everything from the beginning? [y/n]: ").strip().lower()
             if choice == "y":
                 start_index = 0
-                save_run_log(-1)  # reset
+                save_run_log(-1)
             else:
                 print("Okay, exiting.")
                 sys.exit(0)
         else:
             script_next = SCRIPTS_IN_ORDER[resume_index]
-            print(f"[INFO] Found existing run log. Last completed index = {last_completed}.")
-            print(f"[INFO] Next script is index {resume_index}: {script_next}")
+            print(f"[INFO] Found existing run log: last completed index = {last_completed}.")
+            print(f"[INFO] Next script is {resume_index}: {script_next}")
             choice = input("Resume (r) or start over (s)? [r/s]: ").strip().lower()
             if choice == "s":
                 start_index = 0
-                save_run_log(-1)  # reset
+                save_run_log(-1)
             else:
                 start_index = resume_index
 
-    # Main loop
+    # 2) Main loop
     for i in range(start_index, total_scripts):
         script_name = SCRIPTS_IN_ORDER[i]
         run_phase_script(script_name, i)
-        # If successful, update run log
         save_run_log(i)
 
-    print("\n[INFO] All phases completed successfully.")
-
-    # Copy final output files after all scripts complete
+    print("\n[INFO] All phases completed successfully.\n")
     copy_final_outputs()
 
 
