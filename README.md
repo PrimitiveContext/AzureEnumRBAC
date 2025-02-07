@@ -52,31 +52,35 @@ Clone or download this repository, then run:
 
 ## Usage
 
-After installation, a console command "AzureEnumRBAC" is placed in your environment's
+After installation, a console command "AzureEnumRBAC" is placed in your environment’s
 Scripts (Windows) or bin (Linux/macOS) folder. Make sure that folder is on your PATH.
 
-How to find the binary if you lose track:
-- Windows Command Prompt:  where AzureEnumRBAC
-- Windows PowerShell:      Get-Command AzureEnumRBAC
-- macOS/Linux terminals:   which AzureEnumRBAC
+If you want a quick one-liner to find and run the binary for your operating system,
+try one of the following:
 
-Typical installation paths might be:
-- Windows: C:\Users\<YourUser>\AppData\Local\Programs\Python\PythonXX\Scripts
-- Linux/macOS: ~/.local/bin or /usr/local/bin (for global installs)
+- Windows (Command Prompt):
+    where AzureEnumRBAC && AzureEnumRBAC
 
-Once installed, simply run:
+- Linux:
+    which AzureEnumRBAC && AzureEnumRBAC
+
+- macOS:
+    which AzureEnumRBAC && AzureEnumRBAC
+
+Alternatively, you can simply run:
 
     AzureEnumRBAC
 
-You should see the CLI script orchestrating each enumeration phase.
-It will create an "output/" folder under "AzureEnumRBAC/AzureEnumRBAC/"
-or wherever your code references the output path.
+if the script folder is already on your PATH.
 
-You can modify or re-run phases independently (a_login_or_install, b_get_subscriptions,
+Upon running the command, you should see the CLI script orchestrating each enumeration phase.
+It will create an output/ folder under AzureEnumRBAC/AzureEnumRBAC/
+(or wherever your code references the output path).
+
+You can modify or re-run phases independently (e.g., a_login_or_install, b_get_subscriptions,
 etc.), or rely on the main CLI to chain them.
 
-Example:
-
+Example workflow:
 1. Log in with az login if the CLI isn't installed automatically.
 2. Enumerate subscriptions, role assignments, group memberships.
 3. View aggregated data in output/*.json or output/*.csv.
