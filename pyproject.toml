@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=62.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "AzureEnumRBAC"
+version = "0.1.0"
+description = "Enumerate Azure subscriptions, resources, and RBAC roles."
+readme = "README.md"
+license = "MIT"
+authors = [
+  { name="Your Name", email="you@example.com" }
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License"
+]
+keywords = ["azure", "cli", "rbac", "role assignment", "enumeration"]
+dependencies = [
+  "requests>=2.0",
+  "tqdm>=4.0"
+]
+
+[project.scripts]
+AzureEnumRBAC = "AzureEnumRBAC.AzureEnumRBAC:main"
