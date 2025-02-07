@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """
-azureEnum.py
+AzureEnumRBAC.py
 
 An orchestrator for the Azure enumeration scripts, with resume/restart logic
-and a single output folder at azureEnum/output. Sub-scripts run in the
-azureEnum/ directory so that all references to "output" in the scripts 
-actually point to azureEnum/output (no duplicates).
+and a single output folder at AzureEnumRBAC/output. Sub-scripts run in the
+AzureEnumRBAC/ directory so that all references to "output" in the scripts 
+actually point to AzureEnumRBAC/output (no duplicates).
 
 Directory structure:
   your_project/
-    azureEnum.py  <-- this file
-    azureEnum/
+    AzureEnumRBAC.py  <-- this file
+    AzureEnumRBAC/
       a_login_or_install.py
       b_get_subscriptions.py
       c_enumerate_resources.py
@@ -28,10 +28,10 @@ Directory structure:
       output/
 
 Usage:
-  python azureEnum.py
+  python AzureEnumRBAC.py
     - Runs all phases in order (a through m).
     - If interrupted, you can run it again; it will detect the run log 
-      at 'azureEnum/output/azureEnum_run.log' and let you resume.
+      at 'AzureEnumRBAC/output/AzureEnumRBAC_run.log' and let you resume.
 
 If a script fails (nonzero exit), the entire process stops. 
 """
@@ -62,12 +62,12 @@ SCRIPTS_IN_ORDER = [
 
 # We'll store a tiny JSON like {"last_completed": 3} to indicate which script index was last successful
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-SCRIPT_DIR = os.path.join(BASE_DIR, "azureEnum")       # We'll run sub-scripts in this directory
-OUTPUT_DIR = os.path.join(SCRIPT_DIR, "output")        # So all references to "output" from sub-scripts => azureEnum/output
-RUN_LOG_FILE = os.path.join(OUTPUT_DIR, "azureEnum_run.log")
+SCRIPT_DIR = os.path.join(BASE_DIR, "AzureEnumRBAC")       # We'll run sub-scripts in this directory
+OUTPUT_DIR = os.path.join(SCRIPT_DIR, "output")        # So all references to "output" from sub-scripts => AzureEnumRBAC/output
+RUN_LOG_FILE = os.path.join(OUTPUT_DIR, "AzureEnumRBAC_run.log")
 
-# Final output directory (in the same folder as azureEnum.py):
-FINAL_OUTPUT_DIR = os.path.join(BASE_DIR, "azureEnum_FINAL_OUTPUT")
+# Final output directory (in the same folder as AzureEnumRBAC.py):
+FINAL_OUTPUT_DIR = os.path.join(BASE_DIR, "AzureEnumRBAC_FINAL_OUTPUT")
 
 
 def load_run_log():
@@ -87,7 +87,7 @@ def load_run_log():
 
 def save_run_log(index):
     """
-    Write run log with {"last_completed": index} to azureEnum_run.log.
+    Write run log with {"last_completed": index} to AzureEnumRBAC_run.log.
     """
     data = {"last_completed": index}
     with open(RUN_LOG_FILE, "w", encoding="utf-8") as f:
@@ -96,7 +96,7 @@ def save_run_log(index):
 
 def run_phase_script(script_name, index):
     """
-    Runs a single script by name, from within azureEnum/ as cwd.
+    Runs a single script by name, from within AzureEnumRBAC/ as cwd.
     If script fails, we exit entirely.
     """
     script_path = os.path.join(SCRIPT_DIR, script_name)
@@ -107,7 +107,7 @@ def run_phase_script(script_name, index):
     print(f"[INFO] Running phase {index} script: {script_name}")
     cmd = [sys.executable, script_path]
     try:
-        # The key: run in SCRIPT_DIR so all references to "output" => azureEnum/output
+        # The key: run in SCRIPT_DIR so all references to "output" => AzureEnumRBAC/output
         subprocess.run(cmd, check=True, cwd=SCRIPT_DIR)
     except subprocess.CalledProcessError as e:
         print(f"[ERROR] Phase script failed: {script_name}")
@@ -116,12 +116,12 @@ def run_phase_script(script_name, index):
 
 def copy_final_outputs():
     """
-    After all scripts complete, copy files from azureEnum/output whose names
-    start with i_, j_, k_, l_, or m_ into azureEnum_FINAL_OUTPUT,
+    After all scripts complete, copy files from AzureEnumRBAC/output whose names
+    start with i_, j_, k_, l_, or m_ into AzureEnumRBAC_FINAL_OUTPUT,
     removing the letter-underscore prefix from each filename.
     Print a simple ASCII summary of the final file outputs.
     """
-    # Create azureEnum_FINAL_OUTPUT if it doesn't exist
+    # Create AzureEnumRBAC_FINAL_OUTPUT if it doesn't exist
     if not os.path.exists(FINAL_OUTPUT_DIR):
         os.makedirs(FINAL_OUTPUT_DIR, exist_ok=True)
 
@@ -142,7 +142,7 @@ def copy_final_outputs():
 
     if final_filenames:
         print("\n=========================================================")
-        print(" Final Output Files Created in azureEnum_FINAL_OUTPUT:")
+        print(" Final Output Files Created in AzureEnumRBAC_FINAL_OUTPUT:")
         print("=========================================================")
         for fname in final_filenames:
             print(f"  {fname}")
@@ -152,7 +152,7 @@ def copy_final_outputs():
 
 
 def main():
-    # Make sure azureEnum/output directory exists for logs
+    # Make sure AzureEnumRBAC/output directory exists for logs
     if not os.path.exists(OUTPUT_DIR):
         os.makedirs(OUTPUT_DIR, exist_ok=True)
 
