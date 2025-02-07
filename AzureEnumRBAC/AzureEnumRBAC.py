@@ -63,7 +63,7 @@ SCRIPTS_IN_ORDER = [
 # We'll store a tiny JSON like {"last_completed": 3} to indicate which script index was last successful
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SCRIPT_DIR = os.path.join(BASE_DIR, "AzureEnumRBAC")       # We'll run sub-scripts in this directory
-OUTPUT_DIR = os.path.join(SCRIPT_DIR, "output")        # So all references to "output" from sub-scripts => AzureEnumRBAC/output
+OUTPUT_DIR = os.path.join(BASE_DIR, "output")        # So all references to "output" from sub-scripts => AzureEnumRBAC/output
 RUN_LOG_FILE = os.path.join(OUTPUT_DIR, "AzureEnumRBAC_run.log")
 
 # Final output directory (in the same folder as AzureEnumRBAC.py):
