@@ -60,7 +60,7 @@ try one of the following:
 
 - Windows (Command Prompt):
 
-      where AzureEnumRBAC && AzureEnumRBAC
+    where AzureEnumRBAC && AzureEnumRBAC
 
 - Linux:
 
