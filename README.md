@@ -59,12 +59,15 @@ If you want a quick one-liner to find and run the binary for your operating syst
 try one of the following:
 
 - Windows (Command Prompt):
-    where AzureEnumRBAC && AzureEnumRBAC
+
+      where AzureEnumRBAC && AzureEnumRBAC
 
 - Linux:
+
     which AzureEnumRBAC && AzureEnumRBAC
 
 - macOS:
+
     which AzureEnumRBAC && AzureEnumRBAC
 
 Alternatively, you can simply run:
