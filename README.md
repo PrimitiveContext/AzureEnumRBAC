@@ -41,7 +41,7 @@ various CSV/JSON/HTML outputs (like bubble charts for users/roles).
 
 If you have a GitHub repository like:
 
-    pip install git+https://github.com/<YOUR_USERNAME>/AzureEnumRBAC.git
+    pip install git+https://github.com/PrimitiveContext/AzureEnumRBAC.git
 
 ### Local Installation
 
