@@ -7,15 +7,15 @@ various CSV/JSON/HTML outputs (like bubble charts for users/roles).
 
 ## Table of Contents
 
-1. Features
-2. Prerequisites
-3. Installation
-   1. Install from GitHub
-   2. Local Installation
-4. Usage
-5. Repository Structure
-6. Contributing
-7. License
+1. [Features](#features)  
+2. [Prerequisites](#prerequisites)  
+3. [Installation](#installation)  
+   1. [Install from GitHub](#install-from-github)  
+   2. [Local Installation](#local-installation)  
+4. [Usage](#usage)  
+5. [Repository Structure](#repository-structure)  
+6. [Contributing](#contributing)  
+7. [License](#license)
 
 ## Features
 
@@ -39,54 +39,51 @@ various CSV/JSON/HTML outputs (like bubble charts for users/roles).
 
 ### Install from GitHub
 
-If you have a GitHub repository like:
-
-    pip install git+https://github.com/PrimitiveContext/AzureEnumRBAC.git
+pip install git+https://github.com/PrimitiveContext/AzureEnumRBAC.git
 
 ### Local Installation
 
-Clone or download this repository, then run:
-
-    cd AzureEnumRBAC
-    pip install .
+git clone https://github.com/PrimitiveContext/AzureEnumRBAC.git
+cd AzureEnumRBAC
+pip install .
 
 ## Usage
 
-After installation, a console command "AzureEnumRBAC" is placed in your environment’s
+After installation, a console command `AzureEnumRBAC` is placed in your environment’s
 Scripts (Windows) or bin (Linux/macOS) folder. Make sure that folder is on your PATH.
 
 If you want a quick one-liner to find and run the binary for your operating system,
 try one of the following:
 
-- Windows (Command Prompt):
+- **Windows (Command Prompt)**:
+  
+  where AzureEnumRBAC && AzureEnumRBAC
 
-    where AzureEnumRBAC && AzureEnumRBAC
+- **Linux**:
+  
+  which AzureEnumRBAC && AzureEnumRBAC
 
-- Linux:
-
-    which AzureEnumRBAC && AzureEnumRBAC
-
-- macOS:
-
-    which AzureEnumRBAC && AzureEnumRBAC
+- **macOS**:
+  
+  which AzureEnumRBAC && AzureEnumRBAC
 
 Alternatively, you can simply run:
 
-    AzureEnumRBAC
+AzureEnumRBAC
 
 if the script folder is already on your PATH.
 
 Upon running the command, you should see the CLI script orchestrating each enumeration phase.
-It will create an output/ folder under AzureEnumRBAC/AzureEnumRBAC/
+It will create an `output/` folder under `AzureEnumRBAC/AzureEnumRBAC/`
 (or wherever your code references the output path).
 
-You can modify or re-run phases independently (e.g., a_login_or_install, b_get_subscriptions,
+You can modify or re-run phases independently (e.g., `a_login_or_install`, `b_get_subscriptions`,
 etc.), or rely on the main CLI to chain them.
 
-Example workflow:
-1. Log in with az login if the CLI isn't installed automatically.
+**Example workflow**:
+1. Log in with `az login` if the CLI isn't installed automatically.
 2. Enumerate subscriptions, role assignments, group memberships.
-3. View aggregated data in output/*.json or output/*.csv.
+3. View aggregated data in `output/*.json` or `output/*.csv`.
 4. Generate user or role bubble charts and open them in your browser.
 
 ## Repository Structure
@@ -94,7 +91,7 @@ Example workflow:
 AzureEnumRBAC/
 ├── AzureEnumRBAC/
 │   ├── __init__.py
-│   ├── azureEnum.py  (main orchestration)
+│   ├── azureEnum.py         (main orchestration)
 │   ├── a_login_or_install.py
 │   ├── b_get_subscriptions.py
 │   ├── c_enumerate_resources.py
@@ -105,10 +102,10 @@ AzureEnumRBAC/
 
 ## Contributing
 
-- Fork this repository.
-- Create a feature branch for your changes.
-- Submit a pull request describing your enhancement.
+1. Fork this repository.
+2. Create a feature branch for your changes.
+3. Submit a pull request describing your enhancement.
 
 ## License
 
-Distributed under the MIT License. See LICENSE for more details.
+Distributed under the MIT License. See [LICENSE](LICENSE) for more details.
