@@ -55,7 +55,7 @@ Clone or download this repository, then run:
 Once installed, ensure the script directory has been added to PATH and run:
 
     AzureEnumRBAC
-    OR
+OR
     python -m AzureEnumRBAC.AzureEnumRBAC
 
 You should see the CLI script orchestrating each enumeration phase.
