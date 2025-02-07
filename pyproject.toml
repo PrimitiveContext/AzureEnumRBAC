@@ -7,7 +7,7 @@ name = "AzureEnumRBAC"
 version = "0.1.0"
 description = "Enumerate Azure subscriptions, resources, and RBAC roles."
 readme = "README.md"
-license = "MIT"
+license = { file = "LICENSE" }
 authors = [
   { name="Your Name", email="you@example.com" }
 ]
