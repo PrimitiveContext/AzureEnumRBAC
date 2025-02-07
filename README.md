@@ -57,18 +57,10 @@ Once installed, add the script directory to PATH and run:
     AzureEnumRBAC
 
 OR, if you want a quick one-liner to find and run the binary for your operating system, try one of the following:
-
-Windows (Command Prompt):
-    
-    where AzureEnumRBAC && AzureEnumRBAC
-
-Linux:
-    
-    which AzureEnumRBAC && AzureEnumRBAC
-
-macOS:
-    
-    which AzureEnumRBAC && AzureEnumRBAC
+ 
+    <Windows> where AzureEnumRBAC && AzureEnumRBAC
+    <Linux> which AzureEnumRBAC && AzureEnumRBAC
+    <macOS> which AzureEnumRBAC && AzureEnumRBAC
 
 You should see the CLI script orchestrating each enumeration phase.
 It will create an `output/` folder under `AzureEnumRBAC/AzureEnumRBAC/`
