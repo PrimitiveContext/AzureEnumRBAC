@@ -1,20 +1,20 @@
 # AzureEnumRBAC
 
-AzureEnumRBAC is a Python CLI tool that enumerates Azure resources,
+**AzureEnumRBAC** is a Python CLI tool that enumerates Azure resources,
 subscriptions, resource groups, role definitions, and role assignments.
 It also aggregates nested group membership information and produces
 various CSV/JSON/HTML outputs (like bubble charts for users/roles).
 
 ## Table of Contents
 
-1. [Features](#features)  
-2. [Prerequisites](#prerequisites)  
-3. [Installation](#installation)  
-   1. [Install from GitHub](#install-from-github)  
-   2. [Local Installation](#local-installation)  
-4. [Usage](#usage)  
-5. [Repository Structure](#repository-structure)  
-6. [Contributing](#contributing)  
+1. [Features](#features)
+2. [Prerequisites](#prerequisites)
+3. [Installation](#installation)
+   1. [Install from GitHub](#install-from-github)
+   2. [Local Installation](#local-installation)
+4. [Usage](#usage)
+5. [Repository Structure](#repository-structure)
+6. [Contributing](#contributing)
 7. [License](#license)
 
 ## Features
@@ -39,48 +39,41 @@ various CSV/JSON/HTML outputs (like bubble charts for users/roles).
 
 ### Install from GitHub
 
-pip install git+https://github.com/PrimitiveContext/AzureEnumRBAC.git
+If you have a GitHub repository like:
+
+    pip install git+https://github.com/<YOUR_USERNAME>/AzureEnumRBAC.git
 
 ### Local Installation
 
-git clone https://github.com/PrimitiveContext/AzureEnumRBAC.git
-cd AzureEnumRBAC
-pip install .
+Clone or download this repository, then run:
+
+    cd AzureEnumRBAC
+    pip install .
 
 ## Usage
 
-After installation, a console command `AzureEnumRBAC` is placed in your environment’s
-Scripts (Windows) or bin (Linux/macOS) folder. Make sure that folder is on your PATH.
+Once installed, add the script directory to PATH and run:
 
-If you want a quick one-liner to find and run the binary for your operating system,
-try one of the following:
+    AzureEnumRBAC
 
-- **Windows (Command Prompt)**:
-  
-  where AzureEnumRBAC && AzureEnumRBAC
+OR, if you want a quick one-liner to find and run the binary for your operating system, try one of the following:
 
-- **Linux**:
-  
-  which AzureEnumRBAC && AzureEnumRBAC
+Windows (Command Prompt):
+    where AzureEnumRBAC && AzureEnumRBAC
+Linux:
+    which AzureEnumRBAC && AzureEnumRBAC
+macOS:
+    which AzureEnumRBAC && AzureEnumRBAC
 
-- **macOS**:
-  
-  which AzureEnumRBAC && AzureEnumRBAC
-
-Alternatively, you can simply run:
-
-AzureEnumRBAC
-
-if the script folder is already on your PATH.
-
-Upon running the command, you should see the CLI script orchestrating each enumeration phase.
+You should see the CLI script orchestrating each enumeration phase.
 It will create an `output/` folder under `AzureEnumRBAC/AzureEnumRBAC/`
-(or wherever your code references the output path).
+or wherever your code references the output path.
 
-You can modify or re-run phases independently (e.g., `a_login_or_install`, `b_get_subscriptions`,
+You can modify or re-run phases independently (a_login_or_install, b_get_subscriptions,
 etc.), or rely on the main CLI to chain them.
 
-**Example workflow**:
+**Example**:
+
 1. Log in with `az login` if the CLI isn't installed automatically.
 2. Enumerate subscriptions, role assignments, group memberships.
 3. View aggregated data in `output/*.json` or `output/*.csv`.
@@ -88,24 +81,24 @@ etc.), or rely on the main CLI to chain them.
 
 ## Repository Structure
 
-AzureEnumRBAC/
-├── AzureEnumRBAC/
-│   ├── __init__.py
-│   ├── azureEnum.py         (main orchestration)
-│   ├── a_login_or_install.py
-│   ├── b_get_subscriptions.py
-│   ├── c_enumerate_resources.py
-│   ├── ...
-├── pyproject.toml
-├── README.md
-└── LICENSE
+    AzureEnumRBAC/
+    ├── AzureEnumRBAC/
+    │   ├── __init__.py
+    │   ├── azureEnum.py  (main orchestration)
+    │   ├── a_login_or_install.py
+    │   ├── b_get_subscriptions.py
+    │   ├── c_enumerate_resources.py
+    │   ├── ...
+    ├── pyproject.toml
+    ├── README.md
+    └── LICENSE
 
 ## Contributing
 
-1. Fork this repository.
-2. Create a feature branch for your changes.
-3. Submit a pull request describing your enhancement.
+- Fork this repository.
+- Create a feature branch for your changes.
+- Submit a pull request describing your enhancement.
 
 ## License
 
-Distributed under the MIT License. See [LICENSE](LICENSE) for more details.
+Distributed under the **MIT License**. See [LICENSE](LICENSE) for more details.
