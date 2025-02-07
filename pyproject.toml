@@ -5,38 +5,18 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "AzureEnumRBAC"
 version = "0.1.0"
-
-description = """
-A Python CLI tool to enumerate Azure subscriptions, resources, and RBAC roles.
-
-After installation, a console command 'AzureEnumRBAC' is placed in your environment's 
-Scripts (Windows) or bin (Linux/macOS) folder. Make sure that folder is on your PATH.
-
-How to find the binary if you lose track:
-- Windows Command Prompt:  where AzureEnumRBAC
-- Windows PowerShell:      Get-Command AzureEnumRBAC
-- macOS/Linux terminals:   which AzureEnumRBAC
-
-Typical installation paths might be:
-- Windows: C:\\Users\\<YourUser>\\AppData\\Local\\Programs\\Python\\PythonXX\\Scripts
-- Linux/macOS: ~/.local/bin or /usr/local/bin (for global installs)
-"""
-
+description = "Enumerate Azure subscriptions, resources, and RBAC roles."
 readme = "README.md"
 license = { file = "LICENSE" }
-
 authors = [
   { name="Your Name", email="you@example.com" }
 ]
-
 classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python :: 3",
   "License :: OSI Approved :: MIT License"
 ]
-
 keywords = ["azure", "cli", "rbac", "role assignment", "enumeration"]
-
 dependencies = [
   "requests>=2.0",
   "tqdm>=4.0"
