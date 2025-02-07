@@ -60,15 +60,15 @@ try one of the following:
 
 - Windows (Command Prompt):
 
-   where AzureEnumRBAC && AzureEnumRBAC
+    where AzureEnumRBAC && AzureEnumRBAC
 
 - Linux:
 
-   which AzureEnumRBAC && AzureEnumRBAC
+    which AzureEnumRBAC && AzureEnumRBAC
 
 - macOS:
 
-   which AzureEnumRBAC && AzureEnumRBAC
+    which AzureEnumRBAC && AzureEnumRBAC
 
 Alternatively, you can simply run:
 
