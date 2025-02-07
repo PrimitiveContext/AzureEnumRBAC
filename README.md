@@ -1,21 +1,21 @@
 # AzureEnumRBAC
 
-**AzureEnumRBAC** is a Python CLI tool that enumerates Azure resources,
+AzureEnumRBAC is a Python CLI tool that enumerates Azure resources,
 subscriptions, resource groups, role definitions, and role assignments.
 It also aggregates nested group membership information and produces
 various CSV/JSON/HTML outputs (like bubble charts for users/roles).
 
 ## Table of Contents
 
-1. [Features](#features)
-2. [Prerequisites](#prerequisites)
-3. [Installation](#installation)
-   1. [Install from GitHub](#install-from-github)
-   2. [Local Installation](#local-installation)
-4. [Usage](#usage)
-5. [Repository Structure](#repository-structure)
-6. [Contributing](#contributing)
-7. [License](#license)
+1. Features
+2. Prerequisites
+3. Installation
+   1. Install from GitHub
+   2. Local Installation
+4. Usage
+5. Repository Structure
+6. Contributing
+7. License
 
 ## Features
 
@@ -52,37 +52,49 @@ Clone or download this repository, then run:
 
 ## Usage
 
+After installation, a console command "AzureEnumRBAC" is placed in your environment's
+Scripts (Windows) or bin (Linux/macOS) folder. Make sure that folder is on your PATH.
+
+How to find the binary if you lose track:
+- Windows Command Prompt:  where AzureEnumRBAC
+- Windows PowerShell:      Get-Command AzureEnumRBAC
+- macOS/Linux terminals:   which AzureEnumRBAC
+
+Typical installation paths might be:
+- Windows: C:\Users\<YourUser>\AppData\Local\Programs\Python\PythonXX\Scripts
+- Linux/macOS: ~/.local/bin or /usr/local/bin (for global installs)
+
 Once installed, simply run:
 
     AzureEnumRBAC
 
 You should see the CLI script orchestrating each enumeration phase.
-It will create an `output/` folder under `AzureEnumRBAC/AzureEnumRBAC/`
+It will create an "output/" folder under "AzureEnumRBAC/AzureEnumRBAC/"
 or wherever your code references the output path.
 
 You can modify or re-run phases independently (a_login_or_install, b_get_subscriptions,
 etc.), or rely on the main CLI to chain them.
 
-**Example**:
+Example:
 
-1. Log in with `az login` if the CLI isn't installed automatically.
+1. Log in with az login if the CLI isn't installed automatically.
 2. Enumerate subscriptions, role assignments, group memberships.
-3. View aggregated data in `output/*.json` or `output/*.csv`.
+3. View aggregated data in output/*.json or output/*.csv.
 4. Generate user or role bubble charts and open them in your browser.
 
 ## Repository Structure
 
-    AzureEnumRBAC/
-    ├── AzureEnumRBAC/
-    │   ├── __init__.py
-    │   ├── azureEnum.py  (main orchestration)
-    │   ├── a_login_or_install.py
-    │   ├── b_get_subscriptions.py
-    │   ├── c_enumerate_resources.py
-    │   ├── ...
-    ├── pyproject.toml
-    ├── README.md
-    └── LICENSE
+AzureEnumRBAC/
+├── AzureEnumRBAC/
+│   ├── __init__.py
+│   ├── azureEnum.py  (main orchestration)
+│   ├── a_login_or_install.py
+│   ├── b_get_subscriptions.py
+│   ├── c_enumerate_resources.py
+│   ├── ...
+├── pyproject.toml
+├── README.md
+└── LICENSE
 
 ## Contributing
 
@@ -92,4 +104,4 @@ etc.), or rely on the main CLI to chain them.
 
 ## License
 
-Distributed under the **MIT License**. See [LICENSE](LICENSE) for more details.
+Distributed under the MIT License. See LICENSE for more details.
